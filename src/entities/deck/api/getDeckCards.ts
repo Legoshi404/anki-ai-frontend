@@ -4,7 +4,7 @@ import type { PaginationResponse } from "@/shared/api/pagination";
 import type { Card } from "@/entities/card";
 
 interface Params {
-  deckId: string;
+  deckId: number;
   page: number;
   pageSize?: number;
 }
