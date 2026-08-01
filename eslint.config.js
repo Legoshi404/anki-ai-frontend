@@ -5,6 +5,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
+import importPlugin from "eslint-plugin-import";
 
 export default defineConfig([
   globalIgnores(["dist"]),
@@ -21,6 +22,7 @@ export default defineConfig([
     },
     plugins: {
       "simple-import-sort": simpleImportSort,
+      import: importPlugin,
     },
     rules: {
       "simple-import-sort/imports": [
@@ -45,6 +47,18 @@ export default defineConfig([
         },
       ],
       "simple-import-sort/exports": "error",
+
+      "import/newline-after-import": [
+        "error",
+        {
+          count: 1,
+        },
+      ],
+
+      "padding-line-between-statements": [
+        "error",
+        { blankLine: "always", prev: "*", next: "return" },
+      ],
     },
   },
 ]);

@@ -14,6 +14,8 @@ At the moment, the following functionality is available:
 
 - Browse cards within a deck
 - Server-side pagination
+- View individual cards
+- Delete cards
 
 Planned features include:
 
@@ -94,4 +96,9 @@ The codebase is organized into independent layers to improve scalability, mainta
 
 🚧 This project is under active development.
 
-Currently, only deck browsing with server-side pagination is implemented.
+Currently implemented:
+
+- Browse cards within a deck
+- Server-side pagination
+- View individual cards
+- Delete cards
