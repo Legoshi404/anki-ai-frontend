@@ -1,5 +1,6 @@
 import {
   Button,
+  Group,
   Loader,
   Stack,
   TagsInput,
@@ -14,7 +15,7 @@ import { useCard } from "../model/useCard";
 
 export function CardPage() {
   const { deckId, cardId } = useParams();
-  const { card, loading } = useCard({
+  const { card, loading, form } = useCard({
     deckId: Number(deckId),
     cardId: Number(cardId),
   });
@@ -36,9 +37,12 @@ export function CardPage() {
       >
         Back to cards
       </Button>
-      <TextInput value={card.title} readOnly />
-      <Textarea value={card.content} readOnly />
-      <TagsInput value={card.tags} readOnly />
+      <TextInput label="Title" {...form.getInputProps("title")} readOnly />
+      <Textarea label="Content" {...form.getInputProps("content")} readOnly />
+      <TagsInput label="Tags" {...form.getInputProps("tags")} readOnly />
+      <Group justify="flex-end">
+        <Button disabled>Save</Button>
+      </Group>
     </Stack>
   );
 }
