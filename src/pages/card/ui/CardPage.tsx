@@ -15,7 +15,7 @@ import { useCard } from "../model/useCard";
 
 export function CardPage() {
   const { deckId, cardId } = useParams();
-  const { card, loading, form } = useCard({
+  const { card, loading, form, handleUpdateCard } = useCard({
     deckId: Number(deckId),
     cardId: Number(cardId),
   });
@@ -37,12 +37,28 @@ export function CardPage() {
       >
         Back to cards
       </Button>
-      <TextInput label="Title" {...form.getInputProps("title")} readOnly />
-      <Textarea label="Content" {...form.getInputProps("content")} readOnly />
-      <TagsInput label="Tags" {...form.getInputProps("tags")} readOnly />
-      <Group justify="flex-end">
-        <Button disabled>Save</Button>
-      </Group>
+      <form onSubmit={form.onSubmit(handleUpdateCard)}>
+        <TextInput
+          label="Title"
+          placeholder="Card title"
+          {...form.getInputProps("title")}
+        />
+        <Textarea
+          label="Content"
+          autosize
+          minRows={8}
+          placeholder="Card content"
+          {...form.getInputProps("content")}
+        />
+        <TagsInput
+          label="Tags"
+          placeholder="Add tags"
+          {...form.getInputProps("tags")}
+        />
+        <Group justify="flex-end">
+          <Button type="submit">Save</Button>
+        </Group>
+      </form>
     </Stack>
   );
 }

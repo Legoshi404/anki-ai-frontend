@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
 
 import { useAsync } from "@/shared/lib/useAsync";
 
 import type { Card } from "@/entities/card";
 import { getCard } from "@/entities/card/api/getCard";
+import { updateCard } from "@/entities/card/api/updateCard";
+import type { CardFormValues } from "@/entities/card/model/types";
 
 interface Params {
   deckId: number;
@@ -14,12 +17,18 @@ interface Params {
 
 export function useCard({ deckId = 1, cardId }: Params) {
   const { execute, loading, error } = useAsync();
-  const form = useForm({
+  const form = useForm<CardFormValues>({
     mode: "uncontrolled",
     initialValues: {
       title: "",
       content: "",
       tags: [] as string[],
+    },
+    validate: {
+      title: (value) =>
+        value.trim().length === 0 ? "Title is required" : null,
+      content: (value) =>
+        value.trim().length === 0 ? "Content is required" : null,
     },
   });
 
@@ -29,7 +38,7 @@ export function useCard({ deckId = 1, cardId }: Params) {
     execute(async () => {
       const response = await getCard(deckId, cardId);
 
-      form.setValues({
+      form.initialize({
         title: response.title,
         content: response.content,
         tags: response.tags,
@@ -38,6 +47,22 @@ export function useCard({ deckId = 1, cardId }: Params) {
       setCard(response);
     });
   }, [deckId, cardId, execute]);
+
+  const handleUpdateCard = useCallback(
+    (values: CardFormValues) => {
+      execute(async () => {
+        await updateCard(deckId, cardId, values);
+      });
+
+      notifications.show({
+        color: "green",
+        title: "Success",
+        message: "The card has been updated successfully",
+        position: "top-right",
+      });
+    },
+    [deckId, cardId, execute],
+  );
 
   useEffect(() => {
     void reload();
@@ -49,5 +74,6 @@ export function useCard({ deckId = 1, cardId }: Params) {
     loading,
     error,
     reload,
+    handleUpdateCard,
   };
 }
