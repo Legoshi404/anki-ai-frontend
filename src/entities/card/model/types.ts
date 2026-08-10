@@ -4,3 +4,9 @@ export interface Card {
   content: string;
   tags: string[];
 }
+
+export interface CardFormValues {
+  title: string;
+  content: string;
+  tags: string[];
+}
