@@ -16,8 +16,25 @@ interface Params {
 }
 
 export function useCard({ deckId = 1, cardId }: Params) {
+  const [showAiPanel, setShowAiPanel] = useState(false);
   const { execute, loading, error } = useAsync();
+
   const form = useForm<CardFormValues>({
+    mode: "uncontrolled",
+    initialValues: {
+      title: "",
+      content: "",
+      tags: [] as string[],
+    },
+    validate: {
+      title: (value) =>
+        value.trim().length === 0 ? "Title is required" : null,
+      content: (value) =>
+        value.trim().length === 0 ? "Content is required" : null,
+    },
+  });
+
+  const aiForm = useForm<CardFormValues>({
     mode: "uncontrolled",
     initialValues: {
       title: "",
@@ -46,9 +63,10 @@ export function useCard({ deckId = 1, cardId }: Params) {
 
       setCard(response);
     });
-  }, [deckId, cardId, execute]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [execute, deckId, cardId]);
 
-  const handleUpdateCard = useCallback(
+  const update = useCallback(
     (values: CardFormValues) => {
       execute(async () => {
         await updateCard(deckId, cardId, values);
@@ -64,6 +82,27 @@ export function useCard({ deckId = 1, cardId }: Params) {
     [deckId, cardId, execute],
   );
 
+  const applyAiDraft = () => {
+    form.setValues(aiForm.getValues());
+    setShowAiPanel(false);
+  };
+
+  const handleUpdateCard = () => update(form.getValues());
+
+  const handleImprove = () => {
+    const values = form.getValues();
+    aiForm.setValues({
+      title: values.title + " (Improved)",
+      content: values.content + " (Improved)",
+      tags: [...values.tags, "improved"],
+    });
+    setShowAiPanel(true);
+  };
+
+  const handleDiscardAiDraft = () => {
+    setShowAiPanel(false);
+  };
+
   useEffect(() => {
     void reload();
   }, [reload]);
@@ -71,9 +110,14 @@ export function useCard({ deckId = 1, cardId }: Params) {
   return {
     card,
     form,
+    aiForm,
+    showAiPanel,
     loading,
     error,
     reload,
     handleUpdateCard,
+    applyAiDraft,
+    handleImprove,
+    handleDiscardAiDraft,
   };
 }

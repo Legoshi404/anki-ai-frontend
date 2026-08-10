@@ -1,23 +1,37 @@
-import {
-  Button,
-  Group,
-  Loader,
-  Stack,
-  TagsInput,
-  Text,
-  Textarea,
-  TextInput,
-} from "@mantine/core";
+import { Button, Group, Loader, Stack, Text } from "@mantine/core";
 import { ArrowLeftIcon } from "@phosphor-icons/react";
 import { Link, useParams } from "react-router";
+
+import { CardForm } from "@/entities/card/ui/CardForm/CardForm";
+
+import { useImproveCard } from "@/features/improve-card/model/useImproveCard";
 
 import { useCard } from "../model/useCard";
 
 export function CardPage() {
   const { deckId, cardId } = useParams();
-  const { card, loading, form, handleUpdateCard } = useCard({
+  const {
+    card,
+    loading,
+    form,
+    aiForm,
+    handleUpdateCard,
+    applyAiDraft,
+    handleDiscardAiDraft,
+  } = useCard({
     deckId: Number(deckId),
     cardId: Number(cardId),
+  });
+
+  const {
+    improve,
+    loading: improveLoading,
+    generated,
+  } = useImproveCard({
+    deckId: Number(deckId),
+    cardId: Number(cardId),
+    form,
+    aiForm,
   });
 
   if (loading) {
@@ -37,28 +51,43 @@ export function CardPage() {
       >
         Back to cards
       </Button>
-      <form onSubmit={form.onSubmit(handleUpdateCard)}>
-        <TextInput
-          label="Title"
-          placeholder="Card title"
-          {...form.getInputProps("title")}
+      <Group align="flex-start" grow>
+        <CardForm
+          form={form}
+          title="Edit Card"
+          footer={
+            <>
+              <Button type="button" onClick={handleUpdateCard}>
+                Save
+              </Button>
+              <Button
+                type="button"
+                onClick={() => improve(form.getValues())}
+                loading={improveLoading}
+              >
+                ✨ Improve
+              </Button>
+            </>
+          }
+          onSubmit={handleUpdateCard}
         />
-        <Textarea
-          label="Content"
-          autosize
-          minRows={8}
-          placeholder="Card content"
-          {...form.getInputProps("content")}
-        />
-        <TagsInput
-          label="Tags"
-          placeholder="Add tags"
-          {...form.getInputProps("tags")}
-        />
-        <Group justify="flex-end">
-          <Button type="submit">Save</Button>
-        </Group>
-      </form>
+        {generated && (
+          <CardForm
+            form={aiForm}
+            title="AI draft"
+            footer={
+              <Group>
+                <Button type="button" onClick={handleDiscardAiDraft}>
+                  Discard
+                </Button>
+                <Button type="button" onClick={applyAiDraft}>
+                  Use this version
+                </Button>
+              </Group>
+            }
+          />
+        )}
+      </Group>
     </Stack>
   );
 }
