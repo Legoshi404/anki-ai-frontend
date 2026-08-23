@@ -27,9 +27,8 @@ export function DeckCardsPage() {
   return (
     <Stack>
       <Title order={2}>Deck {deckId}</Title>
-      {loading ? (
-        <Loader />
-      ) : (
+      {loading && <Loader />}
+      {!loading && cards && (
         <CardsList cards={cards} onDelete={handleDeleteCard} />
       )}
       <Pagination
