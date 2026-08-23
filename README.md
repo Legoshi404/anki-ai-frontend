@@ -12,17 +12,25 @@ The project is currently in the early stages of development.
 
 At the moment, the following functionality is available:
 
+- Browse decks
 - Browse cards within a deck
 - Server-side pagination
+- View individual cards
+- Edit cards
+- Delete cards
+- AI-powered card improvement
+- Review and edit AI-generated suggestions before applying them
+- Basic application navigation
 
 Planned features include:
 
-- Creating and editing cards
+- Creating decks
+- Creating cards
 - Reviewing cards
 - Search and filtering
 - Tags
 - Import and export
-- AI-powered features
+- Additional AI-powered features
 - And more
 
 ---
@@ -54,44 +62,3 @@ Install dependencies:
 ```bash
 npm install
 ```
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
-The application will be available at:
-
-```text
-http://localhost:5173
-```
-
----
-
-## Tech Stack
-
-- React
-- TypeScript
-- Vite
-- React Router
-- Mantine
-- Fetch API
-- ESLint
-- Prettier
-
----
-
-## Architecture
-
-The project follows the **Feature-Sliced Design (FSD)** architecture.
-
-The codebase is organized into independent layers to improve scalability, maintainability, and separation of concerns.
-
----
-
-## Current Status
-
-🚧 This project is under active development.
-
-Currently, only deck browsing with server-side pagination is implemented.
