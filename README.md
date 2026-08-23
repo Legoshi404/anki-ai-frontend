@@ -62,3 +62,44 @@ Install dependencies:
 ```bash
 npm install
 ```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The application will be available at:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## Tech Stack
+
+- React
+- TypeScript
+- Vite
+- React Router
+- Mantine
+- Fetch API
+- ESLint
+- Prettier
+
+---
+
+## Architecture
+
+The project follows the **Feature-Sliced Design (FSD)** architecture.
+
+The codebase is organized into independent layers to improve scalability, maintainability, and separation of concerns.
+
+---
+
+## Current Status
+
+🚧 This project is under active development.
+
+Currently, only deck browsing with server-side pagination is implemented.
