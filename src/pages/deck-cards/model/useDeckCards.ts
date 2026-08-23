@@ -24,7 +24,7 @@ export function useDeckCards({
 }: Params) {
   const { execute, loading, error } = useAsync();
 
-  const [cards, setCards] = useState<Card[]>([]);
+  const [cards, setCards] = useState<Card[] | null>(null);
   const [total, setTotal] = useState<number>(0);
 
   const reload = useCallback(() => {
@@ -56,12 +56,18 @@ export function useDeckCards({
       maxPossiblePage++;
     }
 
-    if (page > maxPossiblePage) {
-      setSearchParams({
-        page: String(maxPossiblePage > 1 ? maxPossiblePage : 1),
-      });
+    if (page > maxPossiblePage && cards) {
+      setSearchParams(
+        {
+          page: String(Math.min(maxPossiblePage, page)),
+        },
+        {
+          replace: true,
+        },
+      );
     }
-  }, [page, pageSize, setSearchParams, total]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [total]);
 
   const handleDeleteCard = async (deckId: number, cardId: number) =>
     await execute(async () => {
