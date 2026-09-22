@@ -9,6 +9,14 @@ interface Params {
   pageSize?: number;
 }
 
+interface CardsResponse {
+  deck: {
+    id: number;
+    name: string;
+  };
+  cards: Card[];
+}
+
 const DEFAULT_PAGE = 1;
 
 export function getDeckCards({
@@ -16,7 +24,7 @@ export function getDeckCards({
   page = DEFAULT_PAGE,
   pageSize,
 }: Params) {
-  return apiFetch<PaginationResponse<Card>>(
+  return apiFetch<PaginationResponse<CardsResponse>>(
     `/decks/${deckId}/cards?page=${page}&pageSize=${pageSize}`,
   );
 }

@@ -1,4 +1,4 @@
-import { Loader, Pagination, Stack, Title } from "@mantine/core";
+import { Group, Loader, Pagination, Stack, Title } from "@mantine/core";
 import { useParams, useSearchParams } from "react-router";
 
 import { CardsList } from "@/widgets/cards-list";
@@ -13,33 +13,34 @@ export function DeckCardsPage() {
 
   const page = Number(searchParams.get("page") ?? "1");
 
-  const { cards, total, loading, error, handleDeleteCard } = useDeckCards({
-    deckId: Number(deckId),
-    page,
-    pageSize: PAGE_SIZE,
-    setSearchParams,
-  });
-
-  if (error) {
-    return <div>Smth went wrong</div>;
-  }
+  const { deck, cards, total, loading, error, handleDeleteCard } = useDeckCards(
+    {
+      deckId: Number(deckId),
+      page,
+      pageSize: PAGE_SIZE,
+      setSearchParams,
+    },
+  );
 
   return (
     <Stack>
-      <Title order={2}>Deck {deckId}</Title>
+      <Title order={2}>Deck {deck && deck.name}</Title>
       {loading && <Loader />}
+      {!loading && error && <div>Smth went wrong</div>}
       {!loading && cards && (
         <CardsList cards={cards} onDelete={handleDeleteCard} />
       )}
-      <Pagination
-        value={page}
-        onChange={(page) =>
-          setSearchParams({
-            page: String(page),
-          })
-        }
-        total={Math.ceil(total / PAGE_SIZE)}
-      />
+      <Group justify="center">
+        <Pagination
+          value={page}
+          onChange={(page) =>
+            setSearchParams({
+              page: String(page),
+            })
+          }
+          total={Math.ceil(total / PAGE_SIZE)}
+        />
+      </Group>
     </Stack>
   );
 }

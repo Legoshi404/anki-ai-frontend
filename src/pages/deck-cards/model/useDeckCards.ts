@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
 import type { SetURLSearchParams } from "react-router";
 
+import { useDocumentTtitle } from "@/shared/hooks/useDocumentTtitle";
 import { useAsync } from "@/shared/lib/useAsync";
 
 import type { Card } from "@/entities/card";
@@ -25,7 +26,10 @@ export function useDeckCards({
   const { execute, loading, error } = useAsync();
 
   const [cards, setCards] = useState<Card[] | null>(null);
+  const [deck, setDeck] = useState<{ id: number; name: string } | null>(null);
   const [total, setTotal] = useState<number>(0);
+
+  useDocumentTtitle(deck?.name || `${deckId}`);
 
   const reload = useCallback(() => {
     execute(async () => {
@@ -35,7 +39,8 @@ export function useDeckCards({
         pageSize,
       });
 
-      setCards(response.data);
+      setDeck(response.data.deck);
+      setCards(response.data.cards);
       setTotal(response.total);
     });
   }, [deckId, page, pageSize, execute]);
@@ -83,6 +88,7 @@ export function useDeckCards({
     });
 
   return {
+    deck,
     cards,
     total,
     loading,
