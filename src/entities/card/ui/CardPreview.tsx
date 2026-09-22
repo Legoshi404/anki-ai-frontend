@@ -1,4 +1,5 @@
 import { Badge, Group, Paper, Stack, Text, Title } from "@mantine/core";
+import { Link, useParams } from "react-router";
 
 import { DeleteCardButton } from "@/features/delete-card/ui/DeleteCardButton";
 
@@ -10,9 +11,19 @@ interface Props {
 }
 
 export function CardPreview({ card, onDelete }: Props) {
+  const { deckId } = useParams();
+
   return (
-    <Paper withBorder p="md" radius="md">
-      <Group justify="space-between">
+    <Paper
+      component={Link}
+      state={{ from: "cards" }}
+      to={`/decks/${deckId}/cards/${card.id}`}
+      withBorder
+      p="md"
+      radius="md"
+      style={{ textDecoration: "none", color: "inherit", cursor: "pointer" }}
+    >
+      <Group justify="space-between" wrap="nowrap">
         <Stack gap="sm">
           <Title order={4}>{card.title}</Title>
           <Text c="dimmed" lineClamp={2}>

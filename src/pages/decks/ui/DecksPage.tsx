@@ -20,9 +20,14 @@ export function DecksPage() {
     <Container>
       <Group mb="md" justify="space-between">
         <Title order={1}>Decks</Title>
-        <Tooltip label="This feature is under development">
-          <Button disabled>Create deck</Button>
-        </Tooltip>
+        <Group>
+          <Tooltip label="This feature is under development">
+            <Button disabled>Import deck</Button>
+          </Tooltip>
+          <Tooltip label="This feature is under development">
+            <Button disabled>Create deck</Button>
+          </Tooltip>
+        </Group>
       </Group>
       {loading && <Loader />}
       {!loading && !error && decks.length !== 0 && <DeckList decks={decks} />}

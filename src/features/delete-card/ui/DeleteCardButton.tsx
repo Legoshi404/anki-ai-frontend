@@ -16,7 +16,11 @@ export function DeleteCardButton({ onDelete }: Props) {
         <ActionIcon
           color="red"
           variant="subtle"
-          onClick={() => setOpened((value) => !value)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setOpened((value) => !value);
+          }}
         >
           <XCircleIcon size={18} />
         </ActionIcon>
@@ -26,13 +30,24 @@ export function DeleteCardButton({ onDelete }: Props) {
           Delete this card?
         </Text>
         <Group>
-          <Button size="xs" variant="default" onClick={() => setOpened(false)}>
+          <Button
+            size="xs"
+            variant="default"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+
+              setOpened(false);
+            }}
+          >
             Cancel
           </Button>
           <Button
             size="xs"
             color="red"
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
               onDelete();
               setOpened(false);
             }}
